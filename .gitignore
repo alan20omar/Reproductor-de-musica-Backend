@@ -1,5 +1,7 @@
 # Visual studio code
 .vscode/
+# Media
+media/
 # Logs
 logs
 *.log

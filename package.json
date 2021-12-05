@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "express": "^4.17.1",
-    "jsmediatags": "^3.9.7",
-    "mongoose": "^6.0.14"
+    "mongoose": "^6.0.14",
+    "node-id3": "^0.2.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
