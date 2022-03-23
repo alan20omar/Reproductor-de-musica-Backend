@@ -30,7 +30,7 @@ const subSchemaImage = new mongoose.Schema({
         type: String,
         trim: true,
         maxlength: 100,
-        default: 'Undefined'
+        default: undefined
     },
     imageBuffer: {
         type: Buffer,
@@ -68,15 +68,40 @@ const SongSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: '',
-        maxlength: 4
+        // Restricciones añadidas en pre
+        // maxlength: 5,
+        // match: [/^[0-9]{0,5}$|^[0-9]{1,2}\/[0-9]{1,2}$/, 'Por favor ingresa un formato de número de canción del album valido']
     },
     image: {
         type: subSchemaImage,
     },
-    avalible: {
+    available: {
         type: Boolean,
         default: true,
+    },
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    favorite: {
+        type: Boolean,
+        default: false,
     }
+});
+
+SongSchema.pre('save', function (next) {
+    // Restriccion de longitud y formato de numeros n ó n/N
+    if (String(this.trackNumber).length > 5 || !/^([0-9]{0,5}|[0-9]{1,3}\/[0-9]{1}|[0-9]{2}\/[0-9]{2}|[0-9]{1}\/[0-9]{1,3})$/.test(this.trackNumber))
+        this.trackNumber = '';
+    next();
+});
+
+SongSchema.pre('findOneAndUpdate', function (next) {
+    // Restriccion de longitud y formato de numeros n ó n/N
+    if (String(this.getUpdate().$set.trackNumber).length > 5 || !/^([0-9]{0,5}|[0-9]{1,3}\/[0-9]{1}|[0-9]{2}\/[0-9]{2}|[0-9]{1}\/[0-9]{1,3})$/.test(this.getUpdate().$set.trackNumber))
+        this.getUpdate().$set.trackNumber = '';
+    next();
 });
 
 const Song = mongoose.model('Song', SongSchema);
