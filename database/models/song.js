@@ -91,16 +91,30 @@ const SongSchema = new mongoose.Schema({
 });
 
 SongSchema.pre('save', function (next) {
-    // Restriccion de longitud y formato de numeros n ó n/N
+    // Restriccion de longitud y formato de numeros (n ó n/N)
     if (String(this.trackNumber).length > 5 || !/^([0-9]{0,5}|[0-9]{1,3}\/[0-9]{1}|[0-9]{2}\/[0-9]{2}|[0-9]{1}\/[0-9]{1,3})$/.test(this.trackNumber))
         this.trackNumber = '';
+    // Asignar un valor por defecto si son cadenas vacias
+    if (this.artist === '')
+        this.artist = 'Unknown';
+    if (this.album === '')
+        this.album = 'Unknown';
+    if (this.genre === '')
+        this.genre = 'Other';
     next();
 });
 
 SongSchema.pre('findOneAndUpdate', function (next) {
-    // Restriccion de longitud y formato de numeros n ó n/N
+    // Restriccion de longitud y formato de numeros (n ó n/N)
     if (String(this.getUpdate().$set.trackNumber).length > 5 || !/^([0-9]{0,5}|[0-9]{1,3}\/[0-9]{1}|[0-9]{2}\/[0-9]{2}|[0-9]{1}\/[0-9]{1,3})$/.test(this.getUpdate().$set.trackNumber))
         this.getUpdate().$set.trackNumber = '';
+    // Asignar un valor por defecto si son cadenas vacias
+    if (this.getUpdate().$set.artist === '')
+        this.getUpdate().$set.artist = 'Unknown';
+    if (this.getUpdate().$set.album === '')
+        this.getUpdate().$set.album = 'Unknown';
+    if (this.getUpdate().$set.genre === '')
+        this.getUpdate().$set.genre = 'Other';
     next();
 });
 

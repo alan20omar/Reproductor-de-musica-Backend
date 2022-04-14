@@ -1,6 +1,7 @@
 const User = require('../database/models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const settings = require('./../settings');
 
 // POST login a user
 exports.loginUser_post = (req, res) => {
@@ -17,7 +18,7 @@ exports.loginUser_post = (req, res) => {
                         userName: user.name,
                         userId: user._id,
                     };
-                    const token = jwt.sign(payload, 'llave maestra', {
+                    const token = jwt.sign(payload, settings.secretKey, {
                         expiresIn: '5 days'
                     });
                     res.status(200);

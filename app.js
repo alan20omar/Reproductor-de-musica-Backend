@@ -1,6 +1,8 @@
+'use strict'
 // Modules
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const settings = require('./settings');
 // const cors = require('cors');
 // const multer = require('multer');
 // const upload = multer();
@@ -24,6 +26,7 @@ const Song = require('./database/models/song');
 app.use((req, res, next) => {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     // Request headers you wish to allow
@@ -48,7 +51,7 @@ rutasProtegidas.use((req, res, next) => {
     // console.log(token)
     
     if (token) {
-        jwt.verify(token, 'llave maestra', (err, decoded) => {
+        jwt.verify(token, settings.secretKey, (err, decoded) => {
             if (err) {
                 res.status(403);
                 return res.json({ mensaje: 'Token inválida' });
@@ -103,6 +106,6 @@ app.use('/user', userRouter);
 // });
 
 // Ejecucion de la apliccación
-app.listen(3000, () => {
+app.listen(settings.port, () => {
     console.log('server started on port 3000!');
 });

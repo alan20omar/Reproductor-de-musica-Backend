@@ -60,9 +60,9 @@ exports.createSong_post = (req, res) => {
                 res.status(500);
                 res.end('Ocurrio un error a la hora de leer el archivo.');
             }
-            Genre.findOne({ key: tags.genre }, { genre: true, _id: false })
+            Genre.findOne({ key: new RegExp(tags.genre,'i') }, { genre: true, _id: false })
                 .then((genre) => {
-                    if (genre) {
+                    if (genre && tags.genre) {
                         tags.genre = genre.genre;
                     }
                     tags.user = userId;
@@ -207,12 +207,6 @@ exports.deleteSong_delete = (req, res) => {
         });
 };
 
-// exports.prueba = (req, res) => {
-//     console.log(req.body)
-//     res.status(200)
-//     res.send('aaaa')
-// };
-
 // PATCH data of one song by id
 exports.updateSong_patch = (req, res) => {
     // console.log(req.body)
@@ -227,6 +221,7 @@ exports.updateSong_patch = (req, res) => {
         trackNumber: req.body.trackNumber,
         favorite: req.body.favorite
     };
+    console.log(songChanges)
     if (req.file){
         if (req.file.size/1024/1024>2){
             res.status(500);
@@ -237,14 +232,25 @@ exports.updateSong_patch = (req, res) => {
         songChanges.image = image;
     }
     console.log('updated')
-    Song.findOneAndUpdate({ _id: idSong, user: userId, available: true }, { $set: songChanges }, { projection: { available: false, image: false }, returnDocument: 'after',  runValidators: true } )
-        .then((song) => {
-            res.status(200);
-            res.send(song);
+    Genre.findOne({ key: new RegExp(songChanges.genre, 'i') }, { genre: true, _id: false })
+        .then((genre) => {
+            if (genre && songChanges.genre) {
+                songChanges.genre = genre.genre;
+            }
+            Song.findOneAndUpdate({ _id: idSong, user: userId, available: true }, { $set: songChanges }, { projection: { available: false, image: false }, returnDocument: 'after', runValidators: true })
+                .then((song) => {
+                    res.status(200);
+                    res.send(song);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.status(500);
+                    res.end('Ocurrio un error: ' + error);
+                });
         })
         .catch((error) => {
-            console.log(error);
+            console.error(error);
             res.status(500);
-            res.end('Ocurrio un error: ' + error);
+            res.end('Ocurrio un error:' + error);
         });
 };

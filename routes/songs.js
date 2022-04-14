@@ -1,3 +1,4 @@
+'use strict'
 const express = require('express');
 const router = express.Router();
 // for parsing multipart/form-data // use upload.single('<file>')

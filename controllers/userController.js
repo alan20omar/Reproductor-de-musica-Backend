@@ -19,18 +19,18 @@ exports.getUser_get = (req, res) => {
 
 // POST create a user
 exports.createUser_post = (req, res) => {
-    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-        const newUser = {
-            name: req.body.name,
-            last_name: req.body.last_name,
-            email: req.body.email,
-            password: hash,
-        };
-        // console.log(newUser)
-        User.find({email: newUser.email})
-            .then((user)=>{
-                console.log(user)
-                if (!(user.length>0)){
+    // console.log(newUser)
+    User.find({email: req.body.email})
+        .then((user)=>{
+            console.log(user)
+            if (!(user.length>0)){
+                bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+                    const newUser = {
+                        name: req.body.name,
+                        last_name: req.body.last_name,
+                        email: req.body.email,
+                        password: hash,
+                    };
                     User(newUser).save()
                         .then((newUser) => {
                             // console.log('usuario creado')
@@ -42,17 +42,17 @@ exports.createUser_post = (req, res) => {
                             res.status(500);
                             res.end('Ocurrio un error:' + error);
                         });
-                }else{
-                    res.status(409);
-                    res.end('Ya existe un usuario registrado con el correo ' + newUser.email);
-                }      
-            })
-            .catch((error)=>{
-                console.error(error);
-                res.status(500);
-                res.end('Ocurrio un error:' + error);
-            });
-    });
+                });
+            }else{
+                res.status(409);
+                res.end('Ya existe un usuario registrado con el correo ' + req.body.email);
+            }      
+        })
+        .catch((error)=>{
+            console.error(error);
+            res.status(500);
+            res.end('Ocurrio un error:' + error);
+        });
 };
 
 // PATCH user
