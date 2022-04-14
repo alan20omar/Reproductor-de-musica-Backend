@@ -24,8 +24,10 @@ const Song = require('./database/models/song');
 // Backend - http://localhost:3000
 // Frontend - http://localhost:4200
 app.use((req, res, next) => {
+    // console.log(req.headers.origin)
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://frontend-reproductor.web.app');
+    // res.setHeader('Access-Control-Allow-Origin', 'http://frontend-reproductor.web.app');
+    res.setHeader('Access-Control-Allow-Origin', `${req.headers.origin}`);
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
     // Request methods you wish to allow
