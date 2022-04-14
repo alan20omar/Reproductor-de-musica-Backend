@@ -7,6 +7,7 @@ exports.getUser_get = (req, res) => {
     const userId = req.user.userId;
     User.findOne({_id: userId, active: true}, {password: false, active: false})
         .then((user) => {
+            if (!user) throw new Error('No existe el usuario');
             res.status(200);
             res.send(user);
         })

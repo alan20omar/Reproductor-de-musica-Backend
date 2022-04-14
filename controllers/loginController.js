@@ -8,6 +8,7 @@ exports.loginUser_post = (req, res) => {
     // console.log(req.body,'login')
     User.findOne({email: req.body.email},{password: true})
         .then((user) => {
+            if (!user) throw new Error('No existe el usuario');
             bcrypt.compare(req.body.password, user.password, function (err, result) {
                 if (err){
                     res.status(500);
