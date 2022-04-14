@@ -17,14 +17,14 @@ const app = express();
 
 // Database
 const mongoose = require('./database/mongoose');
-const Song = require('./database/models/song');
+// const Song = require('./database/models/song');
 
 
 // CORS - Cross Origin Request Security
 // Backend - http://localhost:3000
 // Frontend - http://localhost:4200
 app.use((req, res, next) => {
-    // console.log(req.headers.origin)
+    console.log(req.headers.origin)
     // Website you wish to allow to connect
     // res.setHeader('Access-Control-Allow-Origin', 'http://frontend-reproductor.web.app');
     res.setHeader('Access-Control-Allow-Origin', `${req.headers.origin}`);
