@@ -1,10 +1,10 @@
 'use strict'
 const mongoose = require('mongoose');
+const config = require('config');
 
 mongoose.Promise = global.Promise;
 
-// mongoose.connect('mongodb://127.0.0.1:27017/songsdb')
-mongoose.connect('mongodb+srv://alan:alan@cluster0.0sqmi.mongodb.net/songsdb?retryWrites=true&w=majority')
+mongoose.connect(config.get('conDatabase'))
     .then(() => {
         console.log('DB connected OK');
     })
@@ -12,4 +12,4 @@ mongoose.connect('mongodb+srv://alan:alan@cluster0.0sqmi.mongodb.net/songsdb?ret
         console.log(error);
     });
 
-module.exports = mongoose
+module.exports = mongoose;

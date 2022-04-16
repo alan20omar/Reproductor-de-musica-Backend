@@ -1,7 +1,7 @@
 const User = require('../database/models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const settings = require('./../settings');
+const config = require('config');
 
 // POST login a user
 exports.loginUser_post = (req, res) => {
@@ -19,7 +19,7 @@ exports.loginUser_post = (req, res) => {
                         userName: user.name,
                         userId: user._id,
                     };
-                    const token = jwt.sign(payload, settings.secretKey, {
+                    const token = jwt.sign(payload, config.get('secretKey'), {
                         expiresIn: '5 days'
                     });
                     res.status(200);
@@ -36,6 +36,6 @@ exports.loginUser_post = (req, res) => {
         })
         .catch((error) => {
             res.status(500);
-            res.end("Usuario no registrado");
+            res.end("Error de servidor. Intentelo mas tarde");
         });
 };

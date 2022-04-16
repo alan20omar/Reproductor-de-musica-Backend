@@ -2,7 +2,7 @@
 // for parsing multipart/form-data // use upload.single('<file>')
 const multer = require('multer');
 // const upload = multer({ dest: './media/songs/' }); // Save the file
-const upload = multer();
+const upload = multer(); // Read formData upload.none()
 const express = require('express');
 const router = express.Router();
 

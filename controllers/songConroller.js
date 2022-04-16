@@ -161,7 +161,7 @@ exports.songFile_get = (req, res) => {
         .catch((error) => {
             console.log(error);
             res.status(500);
-            res.end('Ocurrio un error2: ' + error);
+            res.end('Ocurrio un error. Intentalo mas tarde');
         });
 };
 
@@ -221,7 +221,7 @@ exports.updateSong_patch = (req, res) => {
         trackNumber: req.body.trackNumber,
         favorite: req.body.favorite
     };
-    console.log(songChanges)
+    // console.log(songChanges)
     if (req.file){
         if (req.file.size/1024/1024>2){
             res.status(500);
